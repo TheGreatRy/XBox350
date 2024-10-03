@@ -44,14 +44,35 @@ int main(int argc, char* argv[])
         //draw point
         frameBuffer.DrawPoint(0, 0, color_t{ 255,255,255,255 });for (int i = 0; i < 1000; i++);
         //draw random point
+        /*
         for (int i = 0; i < 1000; i++)
         {
             int x = rand() % frameBuffer.m_width;
             int y = rand() % frameBuffer.m_height;
             frameBuffer.DrawPoint(x, y, color_t{ 255,255,255,255 });
         }
+        */
         //draw rectangle
         frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
+        //draw random lines
+        /*
+        for (int i = 0; i < 100; i++)
+        {
+            int x = rand() % frameBuffer.m_width;
+            int y = rand() % frameBuffer.m_height;
+            int x2 = rand() % frameBuffer.m_width;
+            int y2 = rand() % frameBuffer.m_height;
+            frameBuffer.DrawLine(x, y, x2, y2, color_t{ uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255) });
+        }
+        */
+        //draw random triangle
+        int x = rand() % frameBuffer.m_width;
+        int y = rand() % frameBuffer.m_height;
+        int x2 = rand() % frameBuffer.m_width;
+        int y2 = rand() % frameBuffer.m_height;
+        int x3 = rand() % frameBuffer.m_width;
+        int y3 = rand() % frameBuffer.m_height;
+        frameBuffer.DrawTriangle(x, y, x2, y2, x3, y3,color_t{ uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255) });
         frameBuffer.Update();
 
         renderer = frameBuffer;
