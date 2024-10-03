@@ -32,18 +32,31 @@ int main(int argc, char* argv[])
         }
         // clear screen
         // Renderer Class
+        /*
         SDL_SetRenderDrawColor(renderer.GetRenderer(), 0, 0, 0, 0);
         SDL_RenderClear(renderer.GetRenderer());
+        */
 
         //Framebuffer Class
-        /*
+        
         frameBuffer.Clear(color_t{ 0,0,0,255 });
-        frameBuffer.DrawPoint(0, 0, color_t{ 255,255,255,255 });
+      
+        //draw point
+        frameBuffer.DrawPoint(0, 0, color_t{ 255,255,255,255 });for (int i = 0; i < 1000; i++);
+        //draw random point
+        for (int i = 0; i < 1000; i++)
+        {
+            int x = rand() % frameBuffer.m_width;
+            int y = rand() % frameBuffer.m_height;
+            frameBuffer.DrawPoint(x, y, color_t{ 255,255,255,255 });
+        }
+        //draw rectangle
+        frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
         frameBuffer.Update();
 
         renderer = frameBuffer;
         //renderer.CopyFrameBuffer(frameBuffer);
-        */
+        
 
         // show screen
         SDL_RenderPresent(renderer.GetRenderer());

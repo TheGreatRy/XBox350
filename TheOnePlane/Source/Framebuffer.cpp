@@ -39,5 +39,13 @@ void Framebuffer::DrawPoint(int x, int y, const color_t& color)
 
 void Framebuffer::DrawRect(int x, int y, int w, int h, const color_t& color)
 {
+	if (x + w >= m_width || x < 0 || y + h >= m_height || y < 0) return;
+	for (int sy = y; sy < y + h; sy++)
+	{
+		for (int sx = x; sx < x + w; sx++)
+		{
+			m_buffer[sx + sy * m_width] = color;
+		}
+	}
 
 }
