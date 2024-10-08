@@ -42,19 +42,30 @@ int main(int argc, char* argv[])
         frameBuffer.Clear(color_t{ 0,0,0,255 });
       
         //draw point
-        frameBuffer.DrawPoint(0, 0, color_t{ 255,255,255,255 });for (int i = 0; i < 1000; i++);
+        //frameBuffer.DrawPoint(0, 0, color_t{ 255,255,255,255 });
         //draw random point
-        
+        /*
         for (int i = 0; i < 1000; i++)
         {
             int x = rand() % frameBuffer.m_width;
             int y = rand() % frameBuffer.m_height;
             frameBuffer.DrawPoint(x, y, color_t{ 255,255,255,255 });
         }
+        */
         //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255)
         
         //draw rectangle
-        frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
+        //frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
+
+        //draw with clipping algorithm
+        // clipping
+        frameBuffer.cohenSutherlandClip(-10, 20, 50, -10, color_t{255,255,255,255});
+
+        // no clipping (completely inside)
+        frameBuffer.cohenSutherlandClip(10, 20, 50, 10, color_t{255,255,255,255});
+
+        // no clipping (completely outside)
+        frameBuffer.cohenSutherlandClip(-10, -1, -1, -10, color_t{255,255,255,255});
         
         //draw random lines
         /*
@@ -86,7 +97,7 @@ int main(int argc, char* argv[])
         SDL_GetMouseState(&mx, &my);
 
         //draw linear curve
-        frameBuffer.DrawLinearCurve(100, 100, 200, 200, color_t{ 255,255,255,255 });
+        //frameBuffer.DrawLinearCurve(100, 100, 200, 200, color_t{ 255,255,255,255 });
 
         //draw quad curve
         frameBuffer.DrawQuadraticCurve(100, 200, mx, my, 300, 200, color_t{ 255,255,255,255 });
