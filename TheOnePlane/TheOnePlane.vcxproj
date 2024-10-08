@@ -145,6 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Framebuffer.h" />
+    <ClInclude Include="Source\LineClipping.h" />
+    <ClInclude Include="Source\MathUtils.h" />
     <ClInclude Include="Source\Renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

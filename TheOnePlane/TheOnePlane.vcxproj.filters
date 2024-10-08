@@ -32,5 +32,11 @@
     <ClInclude Include="Source\Framebuffer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\MathUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LineClipping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
