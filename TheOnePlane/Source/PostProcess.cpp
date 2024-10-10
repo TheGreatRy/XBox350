@@ -4,12 +4,12 @@
 
 void PostProcess::Invert(std::vector<color_t>& buffer)
 {
-	for (auto& color : buffer)
+	/*for (auto& color : buffer)
 	{
 		color.r = 255 - color.r;
 		color.g = 255 - color.g;
 		color.b = 255 - color.b;
-	}
+	}*/
 
 	std::for_each(buffer.begin(), buffer.end(), [](auto& color)
 		{

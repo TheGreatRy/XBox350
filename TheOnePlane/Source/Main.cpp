@@ -112,6 +112,8 @@ int main(int argc, char* argv[])
         frameBuffer.DrawImage(20, 20, 50, 100, image);
 
         PostProcess::Invert(frameBuffer.m_buffer);
+        PostProcess::Monochrome(frameBuffer.m_buffer);
+        PostProcess::Brightness(frameBuffer.m_buffer, 70);
 
         frameBuffer.Update();
         renderer = frameBuffer;
