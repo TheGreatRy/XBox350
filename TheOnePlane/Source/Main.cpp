@@ -1,5 +1,7 @@
 #include "Renderer.h"
 #include "FrameBuffer.h"
+#include "PostProcess.h"
+#include "Image.h"
 #include <SDL.h>
 #include <iostream>
 
@@ -12,8 +14,10 @@ int main(int argc, char* argv[])
     // create window
     renderer.CreateWindow("Gaming", 800, 600);
 
-    Framebuffer frameBuffer(renderer, 400, 300);
-   
+    Framebuffer frameBuffer(renderer, 800, 600);
+
+    Image image;
+    image.Load("monty.jpg");
 
     bool quit = false;
     while (!quit)
@@ -55,17 +59,17 @@ int main(int argc, char* argv[])
         //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255)
         
         //draw rectangle
-        //frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
+        frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
 
         //draw with clipping algorithm
         // clipping
-        frameBuffer.cohenSutherlandClip(-10, 20, 50, -10, color_t{255,255,255,255});
+        frameBuffer.DrawLine(-10, 20, 50, -10, color_t{255,255,255,255});
 
         // no clipping (completely inside)
-        frameBuffer.cohenSutherlandClip(10, 20, 50, 10, color_t{255,255,255,255});
+        frameBuffer.DrawLine(10, 20, 50, 10, color_t{255,255,255,255});
 
         // no clipping (completely outside)
-        frameBuffer.cohenSutherlandClip(-10, -1, -1, -10, color_t{255,255,255,255});
+        frameBuffer.DrawLine(-10, -1, -1, -10, color_t{255,255,255,255});
         
         //draw random lines
         /*
@@ -100,10 +104,14 @@ int main(int argc, char* argv[])
         //frameBuffer.DrawLinearCurve(100, 100, 200, 200, color_t{ 255,255,255,255 });
 
         //draw quad curve
-        frameBuffer.DrawQuadraticCurve(100, 200, mx, my, 300, 200, color_t{ 255,255,255,255 });
+        //frameBuffer.DrawQuadraticCurve(100, 200, mx, my, 300, 200, color_t{ 255,255,255,255 });
 
         //draw cubic curve
-        frameBuffer.DrawCubicCurve(100, 200, 100, 100, 200, 100, 200, 200, color_t{ 255,255,255,255 });
+        //frameBuffer.DrawCubicCurve(100, 200, 100, 100, 200, 100, 200, 200, color_t{ 255,255,255,255 });
+
+        frameBuffer.DrawImage(20, 20, 50, 100, image);
+
+        PostProcess::Invert(frameBuffer.m_buffer);
 
         frameBuffer.Update();
         renderer = frameBuffer;

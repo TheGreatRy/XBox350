@@ -1,6 +1,7 @@
 #include "FrameBuffer.h"
 #include "Renderer.h"
 #include "MathUtils.h"
+#include "Image.h"
 #include <iostream>
 
 Framebuffer::Framebuffer(const Renderer& renderer, int width, int height)
@@ -64,7 +65,7 @@ int Framebuffer::computeCode(int x, int y)
 	return code;
 }
 
-void Framebuffer::cohenSutherlandClip(int x1, int y1, int x2, int y2, const color_t& color)
+void Framebuffer::cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2)
 {
 	// Compute region codes for P1, P2
 	int code1 = computeCode(x1, y1);
@@ -84,7 +85,7 @@ void Framebuffer::cohenSutherlandClip(int x1, int y1, int x2, int y2, const colo
 			// in same region
 			break;
 		}
-		else 
+		else
 		{
 			// Some segment of line lies within therectangle
 			int code_out;
@@ -129,13 +130,13 @@ void Framebuffer::cohenSutherlandClip(int x1, int y1, int x2, int y2, const colo
 			// Now intersection point x, y is found
 			// We replace point outside rectangle
 			// by intersection point
-			if (code_out == code1) 
+			if (code_out == code1)
 			{
 				x1 = x;
 				y1 = y;
 				code1 = computeCode(x1, y1);
 			}
-			else 
+			else
 			{
 				x2 = x;
 				y2 = y;
@@ -144,16 +145,53 @@ void Framebuffer::cohenSutherlandClip(int x1, int y1, int x2, int y2, const colo
 		}
 	}
 	if (accept) {
-		DrawLine(x1, y1, x2, y2, color);
-		
+
+
+		 /*
 		std::cout << "Line accepted from " << x1 << ", "
 			<< y1 << " to " << x2 << ", " << y2 << std::endl;
 		// Here the user can add code to display the rectangle
 		// along with the accepted (portion of) lines
-		
+		*/
 	}
-	else
-		std::cout << "Line rejected" << std::endl;
+	//else std::cout << "Line rejected" << std::endl;
+
+
+}
+
+void Framebuffer::DrawImage(int x, int y, int w, int h, const Image& image)
+{
+	w = image.m_width;
+	h = image.m_height;
+	
+	// check if off-screen
+	if (x + w < 0 || y + h < 0 || x >= m_width || y >= m_height) return;
+
+	// iterate through image y
+	for (int iy = 0; iy < image.m_height; iy++)
+	{
+		// set screen y 
+		int sy = y + iy;
+		// check if off-screen, don't draw if off-screen
+
+		if (sy < 0 || sy >= m_height) continue;
+
+		// iterate through image x
+		for (int ix = 0; ix < image.m_width; ix++)
+		{
+			// set screen x
+			int sx = x + ix;
+			// check if off-screen, don't draw if off-screen
+			if (sx < 0 || sx >= m_width) continue;
+
+			//ix -> m-width, loops
+			color_t color = image.m_buffer[ix + iy * image.m_width];
+			// check alpha, if 0 don't draw
+			if (color.a == 0) return ;
+			// set buffer to color
+			m_buffer[sx + sy * m_width] = color;
+		}
+	}
 }
 
 void Framebuffer::DrawPoint(int x, int y, const color_t& color)
@@ -164,20 +202,18 @@ void Framebuffer::DrawPoint(int x, int y, const color_t& color)
 
 void Framebuffer::DrawRect(int x, int y, int w, int h, const color_t& color)
 {
-
-	for (int sy = y; sy < y + h; sy++)
+	/*for (int sy = y; sy < y + h; sy++)
 	{
-		if (y < 0)
-		{
-			h = h + y;
-			y = 0;
-		}
+		if (y < 0) h = h + y;
+		if (y + h > m_width) h = h - y;
 
 		for (int sx = x; sx < x + w; sx++)
 		{
+			if (x < 0) w = w + x;
+			if (x + w > m_width) w = w - x;
 			m_buffer[sx + sy * m_width] = color;
 		}
-	}
+	}*/
 
 }
 
@@ -245,11 +281,15 @@ void Framebuffer::DrawLine(int x1, int y1, int x2, int y2, const color_t& color)
 	dx = x2 - x1;
 	dy = std::abs(y2 - y1);
 
+	
+
 	int error = dx / 2;
 	int ystep = (y1 < y2) ? 1 : -1;
 
 	for (int x = x1, y = y1; x <= x2; x++)
 	{
+		cohenSutherlandClip(x1, y1, x2, y2);
+
 		(steep) ? DrawPoint(y, x, color) : DrawPoint(x, y, color);
 
 		error -= dy;
