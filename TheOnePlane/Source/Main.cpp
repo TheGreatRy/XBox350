@@ -116,9 +116,11 @@ int main(int argc, char* argv[])
         PostProcess::Invert(frameBuffer.m_buffer);
         PostProcess::Monochrome(frameBuffer.m_buffer);
         PostProcess::Brightness(frameBuffer.m_buffer, 70);
+        PostProcess::Noise(frameBuffer.m_buffer, 100);
         PostProcess::ColorBalance(frameBuffer.m_buffer, 150, -50, -50);
         PostProcess::Threshold(frameBuffer.m_buffer, 150);
         PostProcess::Posterize(frameBuffer.m_buffer, 4);
+
 
         //PostProcess::BoxBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
         //PostProcess::GaussBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
