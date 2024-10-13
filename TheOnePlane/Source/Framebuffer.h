@@ -10,20 +10,8 @@ public:
 	Framebuffer(const class Renderer& renderer, int width, int height);
 	~Framebuffer();
 
-	const int INSIDE = 0; // 0000
-	const int LEFT = 1; // 0001
-	const int RIGHT = 2; // 0010
-	const int BOTTOM = 4; // 0100
-	const int TOP = 8; // 1000
-
-	int x_max;
-	int y_max;
-	const int x_min = 0;
-	const int y_min = 0;
-
 	void Update();
 	void Clear(const color_t& color);
-
 
 	void DrawImage(int x, int y, int w, int h, const class Image& image);
 
@@ -41,6 +29,17 @@ public:
 	friend class Renderer;
 
 private:
+	const int INSIDE = 0; // 0000
+	const int LEFT = 1; // 0001
+	const int RIGHT = 2; // 0010
+	const int BOTTOM = 4; // 0100
+	const int TOP = 8; // 1000
+
+	int x_max;
+	int y_max;
+	const int x_min = 0;
+	const int y_min = 0;
+
 	int computeCode(int x, int y);
 	void cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2);
 	

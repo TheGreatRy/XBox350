@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     Framebuffer frameBuffer(renderer, 800, 600);
 
     Image image;
-    image.Load("monty.jpg");
+    image.Load("outside.jpg");
 
     bool quit = false;
     while (!quit)
@@ -59,17 +59,17 @@ int main(int argc, char* argv[])
         //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255)
         
         //draw rectangle
-        frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
+        //frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
 
         //draw with clipping algorithm
         // clipping
-        frameBuffer.DrawLine(-10, 20, 50, -10, color_t{255,255,255,255});
+        //frameBuffer.DrawLine(-10, 20, 50, -10, color_t{255,255,255,255});
 
         // no clipping (completely inside)
-        frameBuffer.DrawLine(10, 20, 50, 10, color_t{255,255,255,255});
+        //frameBuffer.DrawLine(10, 20, 50, 10, color_t{255,255,255,255});
 
         // no clipping (completely outside)
-        frameBuffer.DrawLine(-10, -1, -1, -10, color_t{255,255,255,255});
+        //frameBuffer.DrawLine(-10, -1, -1, -10, color_t{255,255,255,255});
         
         //draw random lines
         /*
@@ -111,15 +111,23 @@ int main(int argc, char* argv[])
 
         frameBuffer.DrawImage(20, 20, 50, 100, image);
 
+        //post process
+        
         PostProcess::Invert(frameBuffer.m_buffer);
         PostProcess::Monochrome(frameBuffer.m_buffer);
         PostProcess::Brightness(frameBuffer.m_buffer, 70);
+        PostProcess::ColorBalance(frameBuffer.m_buffer, 150, -50, -50);
+        PostProcess::Threshold(frameBuffer.m_buffer, 150);
+        PostProcess::Posterize(frameBuffer.m_buffer, 4);
 
+        //PostProcess::BoxBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::GaussBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::Sharpen(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::Edge(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height, 100);
+        
         frameBuffer.Update();
         renderer = frameBuffer;
         //renderer.CopyFrameBuffer(frameBuffer);
-        
-
         // show screen
         SDL_RenderPresent(renderer.GetRenderer());
     }
