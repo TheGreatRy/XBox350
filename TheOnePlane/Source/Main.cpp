@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
         frameBuffer.DrawImage(20, 20, 50, 100, image);
 
         //post process
-        
+        /*
         PostProcess::Invert(frameBuffer.m_buffer);
         PostProcess::Monochrome(frameBuffer.m_buffer);
         PostProcess::Brightness(frameBuffer.m_buffer, 70);
@@ -120,12 +120,13 @@ int main(int argc, char* argv[])
         PostProcess::ColorBalance(frameBuffer.m_buffer, 150, -50, -50);
         PostProcess::Threshold(frameBuffer.m_buffer, 150);
         PostProcess::Posterize(frameBuffer.m_buffer, 4);
+        */
 
-
-        //PostProcess::BoxBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
-        //PostProcess::GaussBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
-        //PostProcess::Sharpen(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
-        //PostProcess::Edge(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height, 100);
+        PostProcess::BoxBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        PostProcess::GaussBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        PostProcess::Sharpen(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        PostProcess::Edge(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height, 100);
+        PostProcess::Emboss(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
         
         frameBuffer.Update();
         renderer = frameBuffer;
