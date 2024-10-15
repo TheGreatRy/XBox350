@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "FrameBuffer.h"
 #include "PostProcess.h"
+#include "Color.h"
 #include "Image.h"
 #include <SDL.h>
 #include <iostream>
@@ -19,6 +20,10 @@ int main(int argc, char* argv[])
     Image image;
     image.Load("outside.jpg");
 
+    Image imageAlp;
+    imageAlp.Load("colors.png");
+    PostProcess::Alpha(imageAlp.m_buffer, 128);
+
     bool quit = false;
     while (!quit)
     {
@@ -34,7 +39,11 @@ int main(int argc, char* argv[])
                 quit = true;
             }
         }
-        // clear screen
+        
+        int mx, my; 
+        SDL_GetMouseState(&mx, &my);
+        //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() %255)
+#pragma region clear_screen
         // Renderer Class
         /*
         SDL_SetRenderDrawColor(renderer.GetRenderer(), 0, 0, 0, 0);
@@ -43,8 +52,10 @@ int main(int argc, char* argv[])
 
         //Framebuffer Class
         
-        frameBuffer.Clear(color_t{ 0,0,0,255 });
-      
+        //frameBuffer.Clear(color_t{ 0,0,0,255 });
+#pragma endregion
+
+#pragma region draw_points_lines
         //draw point
         //frameBuffer.DrawPoint(0, 0, color_t{ 255,255,255,255 });
         //draw random point
@@ -56,10 +67,6 @@ int main(int argc, char* argv[])
             frameBuffer.DrawPoint(x, y, color_t{ 255,255,255,255 });
         }
         */
-        //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255)
-        
-        //draw rectangle
-        //frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
 
         //draw with clipping algorithm
         // clipping
@@ -82,7 +89,13 @@ int main(int argc, char* argv[])
             frameBuffer.DrawLine(x, y, x2, y2, color_t{ uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255) });
         }
         */
+#pragma endregion
 
+#pragma region draw_shapes
+        
+        //draw rectangle
+        //frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
+        
         //draw random triangle
         /*
         int x = rand() % frameBuffer.m_width;
@@ -95,11 +108,10 @@ int main(int argc, char* argv[])
         */
 
         //draw circle
-        frameBuffer.DrawCircle(frameBuffer.m_width / 2, frameBuffer.m_height / 2, 20, color_t{ 255,255,255,255 });
-
-        int mx, my;
-        SDL_GetMouseState(&mx, &my);
-
+        //frameBuffer.DrawCircle(frameBuffer.m_width / 2, frameBuffer.m_height / 2, 20, color_t{ 255,255,255,255 });
+#pragma endregion
+        
+#pragma region draw_curves
         //draw linear curve
         //frameBuffer.DrawLinearCurve(100, 100, 200, 200, color_t{ 255,255,255,255 });
 
@@ -108,10 +120,14 @@ int main(int argc, char* argv[])
 
         //draw cubic curve
         //frameBuffer.DrawCubicCurve(100, 200, 100, 100, 200, 100, 200, 200, color_t{ 255,255,255,255 });
+#pragma endregion
 
+        SetBlendMode(BlendMode::NORMAL);
         frameBuffer.DrawImage(20, 20, 50, 100, image);
+        SetBlendMode(BlendMode::MULTIPLY);
+        frameBuffer.DrawImage(20, 20, 50, 100, imageAlp);
 
-        //post process
+#pragma region post_process
         /*
         PostProcess::Invert(frameBuffer.m_buffer);
         PostProcess::Monochrome(frameBuffer.m_buffer);
@@ -122,16 +138,16 @@ int main(int argc, char* argv[])
         PostProcess::Posterize(frameBuffer.m_buffer, 4);
         */
 
-        PostProcess::BoxBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
-        PostProcess::GaussBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
-        PostProcess::Sharpen(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
-        PostProcess::Edge(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height, 100);
-        PostProcess::Emboss(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::BoxBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::GaussBlur(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::Sharpen(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+        //PostProcess::Edge(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height, 100);
+        //PostProcess::Emboss(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
+#pragma endregion
         
         frameBuffer.Update();
-        renderer = frameBuffer;
-        //renderer.CopyFrameBuffer(frameBuffer);
         // show screen
+        renderer = frameBuffer;
         SDL_RenderPresent(renderer.GetRenderer());
     }
 

@@ -34,6 +34,33 @@ void Framebuffer::Clear(const color_t& color)
 }
 
 
+
+
+void Framebuffer::DrawPoint(int x, int y, const color_t& color)
+{
+	color_t& dest = m_buffer[x + y * m_width];
+	dest = ColorBlend(color, dest);
+}
+
+void Framebuffer::DrawPointClip(int x, int y, const color_t& color)
+{
+	if (x >= m_width || x < 0 || y >= m_height || y < 0) return;
+	
+	color_t& dest = m_buffer[x + y * m_width];
+	dest = ColorBlend(color, dest);
+}
+
+void Framebuffer::DrawRect(int x, int y, int w, int h, const color_t& color)
+{
+	for (int sy = y; sy < y + h; sy++)
+	{
+		for (int sx = x; sx < x + w; sx++)
+		{
+			m_buffer[sx + sy * m_width] = color;
+		}
+	}
+}
+
 void Framebuffer::DrawImage(int x, int y, int w, int h, const Image& image)
 {
 	w = image.m_width;
@@ -61,35 +88,16 @@ void Framebuffer::DrawImage(int x, int y, int w, int h, const Image& image)
 
 			//ix -> m-width, loops
 			color_t color = image.m_buffer[ix + iy * image.m_width];
+			
+			//draw point with alpha value
+			DrawPoint(sx, sy, color);
+			
 			// check alpha, if 0 don't draw
-			if (color.a == 0) return ;
+			//if (color.a == 0) return ;
 			// set buffer to color
-			m_buffer[sx + sy * m_width] = color;
+			//m_buffer[sx + sy * m_width] = color;
 		}
 	}
-}
-
-void Framebuffer::DrawPoint(int x, int y, const color_t& color)
-{
-	if (x >= m_width || x < 0 || y >= m_height || y < 0) return;
-	m_buffer[x + y * m_width] = color;
-}
-
-void Framebuffer::DrawRect(int x, int y, int w, int h, const color_t& color)
-{
-	/*for (int sy = y; sy < y + h; sy++)
-	{
-		if (y < 0) h = h + y;
-		if (y + h > m_width) h = h - y;
-
-		for (int sx = x; sx < x + w; sx++)
-		{
-			if (x < 0) w = w + x;
-			if (x + w > m_width) w = w - x;
-			m_buffer[sx + sy * m_width] = color;
-		}
-	}*/
-
 }
 
 void Framebuffer::DrawLineSlope(int x1, int y1, int x2, int y2, const color_t& color)

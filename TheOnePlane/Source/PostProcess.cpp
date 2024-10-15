@@ -78,14 +78,22 @@ void PostProcess::Posterize(std::vector<color_t>& buffer, uint8_t levels)
 {
 	uint8_t level = 255 / levels ;
 
-	std::for_each(buffer.begin(), buffer.end(), [levels, level](auto& color)
+	std::for_each(buffer.begin(), buffer.end(), [level](auto& color)
 		{
-			color.r = static_cast<uint8_t>(Clamp(color.r / level * level, 0, 255));
-			color.g = static_cast<uint8_t>(Clamp(color.g / level * level, 0, 255));
-			color.b = static_cast<uint8_t>(Clamp(color.b / level * level, 0, 255));
+			color.r = (color.r / level) * level;
+			color.g = (color.g / level) * level;
+			color.b = (color.b / level) * level;
 
 		});
 
+}
+
+void PostProcess::Alpha(std::vector<color_t>& buffer, uint8_t alpha)
+{
+	std::for_each(buffer.begin(), buffer.end(), [alpha](auto& color)
+		{
+			color.a = alpha;
+		});
 }
 
 void PostProcess::BoxBlur(std::vector<color_t>& buffer, int width, int height)
@@ -278,11 +286,17 @@ void PostProcess::Emboss(std::vector<color_t>& buffer, int width, int height)
 	std::vector<color_t> source = buffer;
 	int k[3][3] =
 	{
-		
+		/*
+		//color emboss
 		{-2,-1,0},
 		{-1,1,1},
 		{0,1,2}
+		*/
 
+		//grayscale emboss
+		{-1,-1,0},
+		{-1,0,1},
+		{0,1,1}
 	};
 
 	for (int i = 0; i < buffer.size(); i++)
@@ -299,22 +313,29 @@ void PostProcess::Emboss(std::vector<color_t>& buffer, int width, int height)
 		int b = 0;
 
 		for (int iy = 0; iy < 3; iy++)
-		{
+		{	
 			for (int ix = 0; ix < 3; ix++)
 			{
 				color_t pixel = source[(ix + x - 1) + (iy + y - 1) * width];
 				int weight = k[iy][ix];
-
+			
 				r += pixel.r * weight;
 				g += pixel.g * weight;
 				b += pixel.b * weight;
+				
 			}
-
 		}
+		//grayscale emboss
+		r += 128;
+		g += 128;
+		b += 128;
+
+		//both embosses
 		color_t& color = buffer[i];
 		color.r = static_cast<uint8_t>(Clamp(r, 0, 255));
 		color.g = static_cast<uint8_t>(Clamp(g, 0, 255));
 		color.b = static_cast<uint8_t>(Clamp(b, 0, 255));
+		
 
 	}
 }
