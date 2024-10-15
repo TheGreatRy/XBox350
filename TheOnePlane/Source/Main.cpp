@@ -3,6 +3,8 @@
 #include "PostProcess.h"
 #include "Color.h"
 #include "Image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <SDL.h>
 #include <iostream>
 
@@ -144,6 +146,9 @@ int main(int argc, char* argv[])
         //PostProcess::Edge(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height, 100);
         //PostProcess::Emboss(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
 #pragma endregion
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
         
         frameBuffer.Update();
         // show screen
