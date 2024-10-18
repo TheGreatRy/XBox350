@@ -33,9 +33,6 @@ void Framebuffer::Clear(const color_t& color)
 	std::fill(m_buffer.begin(), m_buffer.end(), color);
 }
 
-
-
-
 void Framebuffer::DrawPoint(int x, int y, const color_t& color)
 {
 	color_t& dest = m_buffer[x + y * m_width];
@@ -63,11 +60,10 @@ void Framebuffer::DrawRect(int x, int y, int w, int h, const color_t& color)
 
 void Framebuffer::DrawImage(int x, int y, int w, int h, const Image& image)
 {
-	w = image.m_width;
-	h = image.m_height;
-	
+	int dx = w - x;
+	int dy = h - y;
 	// check if off-screen
-	if (x + w < 0 || y + h < 0 || x >= m_width || y >= m_height) return;
+	if (x + image.m_width < 0 || y + image.m_height < 0 || x >= m_width || y >= m_height) return;
 
 	// iterate through image y
 	for (int iy = 0; iy < image.m_height; iy++)
@@ -89,8 +85,24 @@ void Framebuffer::DrawImage(int x, int y, int w, int h, const Image& image)
 			//ix -> m-width, loops
 			color_t color = image.m_buffer[ix + iy * image.m_width];
 			
-			//draw point with alpha value
-			DrawPoint(sx, sy, color);
+			dx = w - x;
+			dy = std::abs(h - y);
+
+			int error = dx / 2;
+			int ystep = (y < h) ? 1 : -1;
+
+			for (x, y; x <= w; x++)
+			{
+				DrawPoint(sx, sy, color);
+
+				error -= dy;
+				if (error < 0)
+				{
+					y += ystep;
+					error += dx;
+				}
+			}
+			//draw point
 			
 			// check alpha, if 0 don't draw
 			//if (color.a == 0) return ;
@@ -163,8 +175,6 @@ void Framebuffer::DrawLine(int x1, int y1, int x2, int y2, const color_t& color)
 
 	dx = x2 - x1;
 	dy = std::abs(y2 - y1);
-
-	
 
 	int error = dx / 2;
 	int ystep = (y1 < y2) ? 1 : -1;
@@ -294,6 +304,8 @@ void Framebuffer::DrawCubicCurve(int x1, int y1, int x2, int y2, int x3, int y3,
 	}
 }
 
+//line clipping algorithm https://www.geeksforgeeks.org/line-clipping-set-1-cohen-sutherland-algorithm/
+
 int Framebuffer::computeCode(int x, int y)
 {
 	x_max = m_width;
@@ -328,32 +340,24 @@ int Framebuffer::computeCode(int x, int y)
 
 void Framebuffer::cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2)
 {
-	// Compute region codes for P1, P2
 	int code1 = computeCode(x1, y1);
 	int code2 = computeCode(x2, y2);
 
-	// Initialize line as outside the rectangular window
 	bool accept = false;
 
 	while (true) {
 		if ((code1 == 0) && (code2 == 0)) {
-			// If both endpoints lie within rectangle
 			accept = true;
 			break;
 		}
 		else if (code1 & code2) {
-			// If both endpoints are outside rectangle,
-			// in same region
 			break;
 		}
 		else
 		{
-			// Some segment of line lies within therectangle
 			int code_out;
 			int x, y;
 
-			// At least one endpoint is outside the
-			// rectangle, pick it.
 			if (code1 != 0)
 			{
 				code_out = code1;
@@ -364,7 +368,6 @@ void Framebuffer::cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2)
 
 			}
 
-			// Find intersection point;
 			// using formulas y = y1 + slope * (x - x1),
 			// x = x1 + (1 / slope) * (y - y1)
 			if (code_out & TOP) {
@@ -387,10 +390,7 @@ void Framebuffer::cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2)
 				y = y1 + (y2 - y1) * (x_min - x1) / (x2 - x1);
 				x = x_min;
 			}
-
-			// Now intersection point x, y is found
-			// We replace point outside rectangle
-			// by intersection point
+			// Now intersection point x, y is found We replace point outside rectangle by intersection point
 			if (code_out == code1)
 			{
 				x1 = x;
@@ -406,16 +406,10 @@ void Framebuffer::cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2)
 		}
 	}
 	if (accept) {
-
-
 		 /*
 		std::cout << "Line accepted from " << x1 << ", "
 			<< y1 << " to " << x2 << ", " << y2 << std::endl;
-		// Here the user can add code to display the rectangle
-		// along with the accepted (portion of) lines
 		*/
 	}
 	//else std::cout << "Line rejected" << std::endl;
-
-
 }

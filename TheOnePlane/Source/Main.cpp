@@ -3,6 +3,11 @@
 #include "PostProcess.h"
 #include "Color.h"
 #include "Image.h"
+#include "Model.h"
+#include "ETime.h"
+#include "Input.h"
+#include "Transform.h"
+#include "Camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL.h>
@@ -10,12 +15,23 @@
 
 int main(int argc, char* argv[])
 {
+    Time time;
+    Input input;
+    input.Initialize();
+
     Renderer renderer;
     // initialize SDL
     renderer.Initialize();
 
     // create window
     renderer.CreateWindow("Gaming", 800, 600);
+
+    SetBlendMode(BlendMode::NORMAL);
+
+    Camera camera(renderer.m_width, renderer.m_height);
+    camera.SetView(glm::vec3{ 0,0,-20 }, glm::vec3{ 0 });
+    camera.SetProjection(60.0f, 800.0f / 600, 0.1f, 200.0f);
+    Transform camTransform{ {0,0,-20} };
 
     Framebuffer frameBuffer(renderer, 800, 600);
 
@@ -26,9 +42,16 @@ int main(int argc, char* argv[])
     imageAlp.Load("colors.png");
     PostProcess::Alpha(imageAlp.m_buffer, 128);
 
+    vertices_t vertices = { {-5, 5, 0}, {5, 5, 0},{-5, -5, 0} };
+    Model model(vertices, { 0,255,0,255 });
+    Transform transform = { {0,0,0}, glm::vec3{0,0,45}, glm::vec3{3} };
+
     bool quit = false;
     while (!quit)
     {
+        time.Tick();
+        input.Update();
+
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -45,6 +68,14 @@ int main(int argc, char* argv[])
         int mx, my; 
         SDL_GetMouseState(&mx, &my);
         //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() %255)
+
+        /*
+        int ticks = SDL_GetTicks();
+        float time = ticks * 0.001f;
+        float t = std::abs(std::sin(time));
+        */
+
+
 #pragma region clear_screen
         // Renderer Class
         /*
@@ -54,7 +85,7 @@ int main(int argc, char* argv[])
 
         //Framebuffer Class
         
-        //frameBuffer.Clear(color_t{ 0,0,0,255 });
+        frameBuffer.Clear(color_t{ 0,0,0,255 });
 #pragma endregion
 
 #pragma region draw_points_lines
@@ -124,10 +155,18 @@ int main(int argc, char* argv[])
         //frameBuffer.DrawCubicCurve(100, 200, 100, 100, 200, 100, 200, 200, color_t{ 255,255,255,255 });
 #pragma endregion
 
-        SetBlendMode(BlendMode::NORMAL);
-        frameBuffer.DrawImage(20, 20, 50, 100, image);
-        SetBlendMode(BlendMode::MULTIPLY);
-        frameBuffer.DrawImage(20, 20, 50, 100, imageAlp);
+#pragma region alpha_blend
+
+        //SetBlendMode(BlendMode::NORMAL);
+        //frameBuffer.DrawImage(20, 20, 50, 100, image);
+
+        //SetBlendMode(BlendMode::NORMAL);
+        //SetBlendMode(BlendMode::ALPHA);
+        //SetBlendMode(BlendMode::ADD);
+        //SetBlendMode(BlendMode::MULTIPLY);
+        //frameBuffer.DrawImage(20, 20, 50, 100, imageAlp);
+
+#pragma endregion
 
 #pragma region post_process
         /*
@@ -147,9 +186,31 @@ int main(int argc, char* argv[])
         //PostProcess::Emboss(frameBuffer.m_buffer, frameBuffer.m_width, frameBuffer.m_height);
 #pragma endregion
 
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
-        
+#pragma region models
+        /*
+        glm::mat4 modelMatrix = glm::mat4(1.0f);
+        glm::mat4 translate = glm::translate(modelMatrix, glm::vec3(400.0f, 300.0f, 0.0f));
+        glm::mat4 scale = glm::scale(modelMatrix, glm::vec3(5));
+        glm::mat4 rotate = glm::rotate(modelMatrix, glm::radians(time * 90), glm::vec3{ 0,1,0 });
+        modelMatrix = translate * scale * rotate;
+        */
+
+        glm::vec3 direction{ 0 };
+
+        if (input.GetKeyDown(SDL_SCANCODE_W)) direction.x = 1;
+        if (input.GetKeyDown(SDL_SCANCODE_S)) direction.x = -1;
+        if (input.GetKeyDown(SDL_SCANCODE_D)) direction.y = 1;
+        if (input.GetKeyDown(SDL_SCANCODE_A)) direction.y = -1;
+        if (input.GetKeyDown(SDL_SCANCODE_Q)) direction.z = 1;
+        if (input.GetKeyDown(SDL_SCANCODE_E)) direction.z = -1;
+       
+        camTransform.position += direction * 70.0f * time.GetDeltaTime();
+        camera.SetView(camTransform.position, camTransform.position);
+        direction += 90 * direction.z;
+#pragma endregion
+
+        model.Draw(frameBuffer, transform.getMatirx(), camera);
+
         frameBuffer.Update();
         // show screen
         renderer = frameBuffer;

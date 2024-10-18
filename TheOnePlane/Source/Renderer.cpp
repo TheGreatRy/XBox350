@@ -14,6 +14,8 @@ void Renderer::Initialize()
 
 void Renderer::CreateWindow(std::string name, int width, int height)
 {
+    m_width = width;
+    m_height = height;
     // create window
     // returns pointer to window if successful or nullptr if failed
     m_window = SDL_CreateWindow(name.c_str(),
