@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 
     vertices_t vertices = { {-5, 5, 0}, {5, 5, 0},{-5, -5, 0} };
     Model model(vertices, { 0,255,0,255 });
-    Transform transform = { {0,0,0}, glm::vec3{0,0,45}, glm::vec3{3} };
+    Transform transform = { {0,0,45}, glm::vec3{0,0,45}, glm::vec3{3} };
 
     bool quit = false;
     while (!quit)
@@ -195,20 +195,20 @@ int main(int argc, char* argv[])
         modelMatrix = translate * scale * rotate;
         */
 
-        glm::vec3 direction{ 0 };
+        //glm::vec3 direction{ 0 };
 
-        if (input.GetKeyDown(SDL_SCANCODE_W)) direction.x = 1;
-        if (input.GetKeyDown(SDL_SCANCODE_S)) direction.x = -1;
-        if (input.GetKeyDown(SDL_SCANCODE_D)) direction.y = 1;
-        if (input.GetKeyDown(SDL_SCANCODE_A)) direction.y = -1;
-        if (input.GetKeyDown(SDL_SCANCODE_Q)) direction.z = 1;
-        if (input.GetKeyDown(SDL_SCANCODE_E)) direction.z = -1;
+        //if (input.GetKeyDown(SDL_SCANCODE_W)) direction.x = 1;
+        //if (input.GetKeyDown(SDL_SCANCODE_S)) direction.x = -1;
+        //if (input.GetKeyDown(SDL_SCANCODE_D)) direction.y = 1;
+        //if (input.GetKeyDown(SDL_SCANCODE_A)) direction.y = -1;
+        //if (input.GetKeyDown(SDL_SCANCODE_Q)) direction.z = 1;
+        //if (input.GetKeyDown(SDL_SCANCODE_E)) direction.z = -1;
        
-        camTransform.position += direction * 70.0f * time.GetDeltaTime();
-        camera.SetView(camTransform.position, camTransform.position);
-        direction += 90 * direction.z;
+        ////camTransform.position += direction * 70.0f * time.GetDeltaTime();
+        ////camera.SetView(camTransform.position, glm::vec3{ 0 });
+        //direction += 90 * direction.z;
 #pragma endregion
-
+        
         model.Draw(frameBuffer, transform.getMatirx(), camera);
 
         frameBuffer.Update();

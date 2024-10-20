@@ -18,15 +18,15 @@ glm::vec3 Camera::ModelToView(const glm::vec3& position) const
 	return m_view * glm::vec4(position, 1);
 }
 
-glm::vec3 Camera::ViewToProjection(const glm::vec3& position) const
+glm::vec4 Camera::ViewToProjection(const glm::vec3& position) const
 {
 	//convert from view space to projection space
 	return m_projection * glm::vec4(position, 1);
 }
 
-glm::vec2 Camera::ToScreen(const glm::vec3& position) const
+glm::ivec2 Camera::ViewToScreen(const glm::vec3& position) const
 {
-	glm::vec4 clip = m_projection * glm::vec4(position, 1);
+	glm::vec4 clip = ViewToProjection(position);
 	glm::vec3 ndc = clip / clip.w;
 
 	float x = (ndc.x + 1) * (m_width * 0.5f);
