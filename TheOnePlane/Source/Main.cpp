@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     SetBlendMode(BlendMode::NORMAL);
 
     Camera camera(renderer.m_width, renderer.m_height);
-    camera.SetView(glm::vec3{ 0,0,-20 }, glm::vec3{ 0 });
+    camera.SetView(glm::vec3{ 0,0,-200}, glm::vec3{ 0 });
     camera.SetProjection(60.0f, 800.0f / 600, 0.1f, 200.0f);
     Transform camTransform{ {0,0,-20} };
 
@@ -44,7 +44,12 @@ int main(int argc, char* argv[])
 
     vertices_t vertices = { {-5, 5, 0}, {5, 5, 0},{-5, -5, 0} };
     Model model(vertices, { 0,255,0,255 });
-    Transform transform = { {0,0,45}, glm::vec3{0,0,45}, glm::vec3{3} };
+    Transform transform = { {0,0,45}, glm::vec3{0,0,0}, glm::vec3{3} };
+
+    Model objModel;
+    objModel.Load("torus.obj");
+    objModel.SetColor({ 0, 255, 0, 255 });
+    Transform objTransform = { {0,0,30}};
 
     bool quit = false;
     while (!quit)
@@ -102,13 +107,13 @@ int main(int argc, char* argv[])
         */
 
         //draw with clipping algorithm
-        // clipping
+        //// clipping
         //frameBuffer.DrawLine(-10, 20, 50, -10, color_t{255,255,255,255});
 
-        // no clipping (completely inside)
+        ////no clipping (completely inside)
         //frameBuffer.DrawLine(10, 20, 50, 10, color_t{255,255,255,255});
 
-        // no clipping (completely outside)
+        ////no clipping (completely outside)
         //frameBuffer.DrawLine(-10, -1, -1, -10, color_t{255,255,255,255});
         
         //draw random lines
@@ -195,21 +200,23 @@ int main(int argc, char* argv[])
         modelMatrix = translate * scale * rotate;
         */
 
-        //glm::vec3 direction{ 0 };
+        glm::vec3 direction{ 0 };
 
-        //if (input.GetKeyDown(SDL_SCANCODE_W)) direction.x = 1;
-        //if (input.GetKeyDown(SDL_SCANCODE_S)) direction.x = -1;
-        //if (input.GetKeyDown(SDL_SCANCODE_D)) direction.y = 1;
-        //if (input.GetKeyDown(SDL_SCANCODE_A)) direction.y = -1;
-        //if (input.GetKeyDown(SDL_SCANCODE_Q)) direction.z = 1;
-        //if (input.GetKeyDown(SDL_SCANCODE_E)) direction.z = -1;
+        if (input.GetKeyDown(SDL_SCANCODE_D)) direction.x = 1;
+        if (input.GetKeyDown(SDL_SCANCODE_A)) direction.x = -1;
+        if (input.GetKeyDown(SDL_SCANCODE_W)) direction.y = 1;
+        if (input.GetKeyDown(SDL_SCANCODE_S)) direction.y = -1;
+        if (input.GetKeyDown(SDL_SCANCODE_Q)) direction.z = 1;
+        if (input.GetKeyDown(SDL_SCANCODE_E)) direction.z = -1;
        
-        ////camTransform.position += direction * 70.0f * time.GetDeltaTime();
-        ////camera.SetView(camTransform.position, glm::vec3{ 0 });
-        //direction += 90 * direction.z;
+        camTransform.position += direction * 70.0f * time.GetDeltaTime();
+        camera.SetView(camTransform.position, glm::vec3{ 0 });
+        direction += 90 * direction.z;
+
 #pragma endregion
         
-        model.Draw(frameBuffer, transform.getMatirx(), camera);
+        //model.Draw(frameBuffer, transform.getMatirx(), camera);
+        objModel.Draw(frameBuffer,objTransform.getMatirx(), camera);
 
         frameBuffer.Update();
         // show screen

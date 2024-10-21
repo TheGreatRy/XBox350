@@ -2,6 +2,7 @@
 #include "Color.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
 
 using vertex_t = glm::vec3;
 using vertices_t = std::vector<vertex_t>;
@@ -16,6 +17,8 @@ public:
 	{}
 
 	void Draw(class Framebuffer& frameBuffer, const glm::mat4& model, const class Camera& camera);
+	bool Load(const std::string& filename);
+	void SetColor(const color_t& color) { m_color = color; }
 
 private:
 	vertices_t m_vertices;
