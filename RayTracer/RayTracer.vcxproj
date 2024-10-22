@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{922c5a06-53ad-44c9-8bb7-e241a82dc9b9}</ProjectGuid>
+    <ProjectGuid>{54AAA094-240A-404A-A0C9-A62D71A57613}</ProjectGuid>
     <RootNamespace>TheOnePlane</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
