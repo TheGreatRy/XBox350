@@ -37,7 +37,13 @@
     <ClCompile Include="Source\Renderer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tracer.cpp" />
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tracer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Actor.h">
@@ -80,6 +86,18 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Source\Tracer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneObject.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sphere.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

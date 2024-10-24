@@ -1,18 +1,21 @@
 #include "Tracer.h"
-#include "Framebuffer.h"
-#include "Camera.h"
+#include "Scene.h"
+#include "MathUtils.h"
 
-void Tracer::Render(Framebuffer& framebuffer, const Camera& camera)
+color3_t Tracer::Trace(Scene& scene, const ray_t& ray)
 {
-	for (int y = 0; y < framebuffer.m_height; y++)
+	color3_t color{ 0 };
+	for(auto & object : scene.m_objects)
 	{
-		for (int x = 0; x < framebuffer.m_width; x++)
+		if (object->Hit(ray))
 		{
-			glm::vec2 point{ x,y };
-
-			ray_t ray = camera.GetRay(point);
-			color4_t color = { 1,0,0,1 };
-			framebuffer.DrawPoint(x, y, ColorConvert(color));
+			return { 1,0,0 };
 		}
 	}
+
+	glm::vec3 direction = glm::normalize(ray.direction);
+	float t = direction.y;
+	color = Lerp(color3_t{ 1,1,1 }, color3_t{ 0.5f, 0.7f, 0.1f }, t);
+	
+	return color;
 }

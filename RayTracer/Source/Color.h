@@ -30,6 +30,17 @@ inline color4_t ColorConvert(const color_t& color)
 	return color4;
 }
 
+inline color_t ColorConvert(const color3_t& color3)
+{
+	color_t color;
+	color.r = color3.r / 255.0f;
+	color.g = color3.g / 255.0f;
+	color.b = color3.b / 255.0f;
+	color.a = 255;
+
+	return color;
+}
+
 enum class BlendMode
 {
 	NORMAL,

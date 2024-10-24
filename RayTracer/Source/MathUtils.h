@@ -2,9 +2,9 @@
 #include <glm/glm.hpp>
 
 template<typename T>
-inline int Lerp(const T& a, const T& b, float t)
+inline T Lerp(const T& a, const T& b, float t)
 {
-	return static_cast<T>(a + t*(b - a));
+	return static_cast<T>(a + (b - a) * t);
 }
 inline glm::vec3 Cross(const glm::vec3& v1, const glm::vec3& v2)
 {
