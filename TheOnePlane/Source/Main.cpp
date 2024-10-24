@@ -1,3 +1,4 @@
+
 #include "Renderer.h"
 #include "FrameBuffer.h"
 #include "PostProcess.h"
@@ -33,7 +34,7 @@ int main(int argc, char* argv[])
     SetBlendMode(BlendMode::NORMAL);
 
     Camera camera(renderer.m_width, renderer.m_height);
-    camera.SetView(glm::vec3{ 0,0,-100}, glm::vec3{ 0 });
+    camera.SetView(glm::vec3{ 0,0,-100 }, glm::vec3{ 0 });
     camera.SetProjection(90.0f, 800.0f / 600, 0.1f, 200.0f);
     Transform camTransform{ {0,0,-20} };
 
@@ -47,14 +48,14 @@ int main(int argc, char* argv[])
     PostProcess::Alpha(imageAlp.m_buffer, 128);
 
     vertices_t vertices = { {-5, 5, 0}, {5, 5, 0},{-5, -5, 0} };
-    //Model model(vertices, { 0,255,0,255 });
+    //Model model(vertices, { 0,255,0,255 });Header
 
     std::shared_ptr<Model> model = std::make_shared<Model>();
 
     model->Load("cube-2.obj");
     model->SetColor({ 0, 255, 0, 255 });
 
-    Transform transform = { {randomf(-10.0f, 10.0f),0,0}, glm::vec3{0,0,0}, glm::vec3{2}};
+    Transform transform = { {randomf(-10.0f, 10.0f),0,0}, glm::vec3{0,0,0}, glm::vec3{2} };
     std::vector<std::unique_ptr<Actor>> actors;
     for (int i = 0; i < 1; i++)
     {
@@ -82,8 +83,8 @@ int main(int argc, char* argv[])
                 quit = true;
             }
         }
-        
-        int mx, my; 
+
+        int mx, my;
         SDL_GetMouseState(&mx, &my);
         //uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() %255)
 
@@ -102,7 +103,7 @@ int main(int argc, char* argv[])
         */
 
         //Framebuffer Class
-        
+
         frameBuffer.Clear(color_t{ 0,0,0,255 });
 #pragma endregion
 
@@ -128,7 +129,7 @@ int main(int argc, char* argv[])
 
         ////no clipping (completely outside)
         //frameBuffer.DrawLine(-10, -1, -1, -10, color_t{255,255,255,255});
-        
+
         //draw random lines
         /*
         for (int i = 0; i < 100; i++)
@@ -143,10 +144,10 @@ int main(int argc, char* argv[])
 #pragma endregion
 
 #pragma region draw_shapes
-        
+
         //draw rectangle
         //frameBuffer.DrawRect(20, 10, 50, 50, color_t{ 255,255,255,255 });
-        
+
         //draw random triangle
         /*
         int x = rand() % frameBuffer.m_width;
@@ -161,7 +162,7 @@ int main(int argc, char* argv[])
         //draw circle
         //frameBuffer.DrawCircle(frameBuffer.m_width / 2, frameBuffer.m_height / 2, 20, color_t{ 255,255,255,255 });
 #pragma endregion
-        
+
 #pragma region draw_curves
         //draw linear curve
         //frameBuffer.DrawLinearCurve(100, 100, 200, 200, color_t{ 255,255,255,255 });
@@ -240,10 +241,10 @@ int main(int argc, char* argv[])
         {
             input.SetRelativeMode(false);
         }
-            
+
         camera.SetView(camTransform.position, camTransform.position + camTransform.GetForward());
         //model.Draw(frameBuffer, transform.GetMatrix(), camera);
-        for (auto& actor : actors) 
+        for (auto& actor : actors)
         {
             actor->Draw(frameBuffer, camera);
         }

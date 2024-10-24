@@ -74,7 +74,7 @@ bool Model::Load(const std::string& filename)
 			sstream >> position.z;
 
 			//add position to vertices vector
-			m_vertices.push_back(position);
+			vertices.push_back(position);
 		}
 		// read in faces (triangles)
 		else if (line.substr(0, 2) == "f ")
