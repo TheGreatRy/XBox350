@@ -10,7 +10,7 @@ public:
 		m_model{model}
 	{}
 
-	const Transform& GetTransform() const { return m_transform; }
+	Transform& GetTransform() { return m_transform; }
 	void Draw(class Framebuffer& frameBuffer, const class Camera& camera);
 	void SetColor(const color_t& color) { m_color = color; }
 

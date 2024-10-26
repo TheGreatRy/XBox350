@@ -43,7 +43,9 @@
     <ClCompile Include="Source\Tracer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Sphere.cpp" />
+    <ClCompile Include="Source\Sphere.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Actor.h">

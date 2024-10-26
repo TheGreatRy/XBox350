@@ -22,5 +22,5 @@ public:
 
 private:
 	vertices_t m_vertices;
-	color_t m_color;
+	color_t m_color{ 255,255,255,255 };
 };

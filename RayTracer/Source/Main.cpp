@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 
         framebuffer.Clear(color_t{ 0,255,0,255 });
 
-        scene.Render(framebuffer, camera);
+        //scene.Render(framebuffer, camera);
 
         framebuffer.Update();
         // show screen

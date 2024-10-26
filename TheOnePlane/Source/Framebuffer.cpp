@@ -91,7 +91,7 @@ void Framebuffer::DrawImage(int x, int y, int w, int h, const Image& image)
 			// set buffer to color
 		
 			//draw point
-			DrawPoint(sx, sy, color);
+			DrawPointClip(sx, sy, color);
 			
 			//m_buffer[sx + sy * m_width] = color;
 		}
@@ -343,7 +343,7 @@ bool Framebuffer::cohenSutherlandClip(int& x1, int& y1, int& x2, int& y2)
 		else
 		{
 			int code_out;
-			int x, y;
+			int x, y{ 0 };
 
 			if (code1 != 0)
 			{

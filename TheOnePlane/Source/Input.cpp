@@ -1,6 +1,5 @@
 #include "Input.h"
 #include <SDL.h>
-
 bool Input::Initialize()
 {
 	int numKeys;
@@ -49,9 +48,9 @@ void Input::Update()
 	// 000
 	m_prevMouseButtonState = m_mouseButtonState;
 
-	m_mouseButtonState[0] = buttonState & SDL_BUTTON_LMASK; 
-	m_mouseButtonState[1] = buttonState & SDL_BUTTON_MMASK; 
-	m_mouseButtonState[2] = buttonState & SDL_BUTTON_RMASK; 
+	m_mouseButtonState[0] = buttonState & SDL_BUTTON_LMASK;
+	m_mouseButtonState[1] = buttonState & SDL_BUTTON_MMASK;
+	m_mouseButtonState[2] = buttonState & SDL_BUTTON_RMASK;
 }
 
 void Input::SetRelativeMode(bool relative)

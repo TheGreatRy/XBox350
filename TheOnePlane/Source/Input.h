@@ -28,7 +28,7 @@ public:
 private:
 	std::vector<uint8_t> m_keyboardState;
 	std::vector<uint8_t> m_prevKeyboardState;
-
+	
 	glm::vec2 m_mousePosition{ 0, 0 };
 	glm::vec2 m_prevMousePosition{ 0, 0 };
 	glm::vec2 m_mouseRelative{ 0, 0 };

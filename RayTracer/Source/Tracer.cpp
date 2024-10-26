@@ -1,15 +1,16 @@
 #include "Tracer.h"
 #include "Scene.h"
+#include "Material.h"
 #include "MathUtils.h"
 
 color3_t Tracer::Trace(Scene& scene, const ray_t& ray)
 {
 	color3_t color{ 0 };
-	for(auto & object : scene.m_objects)
+	for (auto& object : scene.m_objects)
 	{
 		if (object->Hit(ray))
 		{
-			return { 1,0,0 };
+			return object->GetMaterial().lock()->GetColor();
 		}
 	}
 
