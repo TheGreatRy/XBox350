@@ -43,8 +43,58 @@ int main(int argc, char* argv[])
 
     scene.AddObject(std::move(object));
 
-    std::shared_ptr<Material> planeMaterial = std::make_shared<Material>(color3_t{ 0,0,1 });
-    auto plane = std::make_unique<Plane>(glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, planeMaterial);
+    std::shared_ptr<Material> green = std::make_shared<Material>(color3_t{ 0,1,0 });
+    /*auto plane = std::make_unique<Plane>(glm::vec3{0, 0, 0}, glm::vec3{0, 1, 0}, planeMaterial);
+    scene.AddObject(std::move(plane));*/
+
+    std::shared_ptr<Material> gray = std::make_shared<Material>(color3_t{ 0.5f });
+    std::shared_ptr<Material> red = std::make_shared<Material>(color3_t{ 1, 0, 0 });
+    std::shared_ptr<Material> blue = std::make_shared<Material>(color3_t{ 0, 0, 1 });
+    std::shared_ptr<Material> pink = std::make_shared<Material>(color3_t{ 1, 0, 1});
+    std::shared_ptr<Material> yellow = std::make_shared<Material>(color3_t{ 1, 1, 0 });
+
+    for (int i = 0; i < 20; i++)
+    {
+        int randInt = random(1, 6);
+        switch (randInt)
+        {
+            case 1:
+            {
+                auto redObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), red);
+                scene.AddObject(std::move(redObject));
+                break;
+            }
+                
+            case 2:
+            {
+                auto blueObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), blue);
+                scene.AddObject(std::move(blueObject));
+                break;
+            }
+            case 3:
+            {
+                auto greenObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), green);
+                scene.AddObject(std::move(greenObject));
+                break;
+            }
+            case 4:
+            {
+                auto pinkObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), pink);
+                scene.AddObject(std::move(pinkObject));
+                break;
+            }
+            case 5:
+            {
+                auto yellowObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), yellow);
+                scene.AddObject(std::move(yellowObject));
+                break;
+            }
+
+        }
+    
+    }
+
+    auto plane = std::make_unique<Plane>(glm::vec3{ 0, -5, 0 }, glm::vec3{ 0, 1, 0 }, gray); 
     scene.AddObject(std::move(plane));
 
     bool quit = false;
