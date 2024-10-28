@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#define FLT_EPSILON 1.192092896e-07F 
 
 template<typename T>
 inline T Lerp(const T& a, const T& b, float t)
@@ -19,6 +20,11 @@ template<typename T>
 inline T Clamp(const T& value, const T& min, const T& max)
 {
 	return (value < min) ? min : (value > max) ? max : value;
+}
+inline bool approximately(float value1, float value2)
+{
+	// check if the difference between the values is less than epsilon
+	return (glm::abs(value2 - value1) < FLT_EPSILON);
 }
 inline void QuadraticPoint(int x1, int y1, int x2, int y2, int x3, int y3, float t, int& x, int& y)
 {

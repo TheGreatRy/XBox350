@@ -19,28 +19,28 @@ inline color_t ColorConvert(const color4_t& color4)
 
 	return color;
 }
-inline color4_t ColorConvert(const color_t& color)
-{
-	color4_t color4;
-	color4.r = color.r / 255.0f;
-	color4.g = color.g / 255.0f;
-	color4.b = color.b / 255.0f;
-	color4.a = 255;
-
-	return color4;
-}
 
 inline color_t ColorConvert(const color3_t& color3)
 {
 	color_t color;
-	color.r = color3.r / 255.0f;
-	color.g = color3.g / 255.0f;
-	color.b = color3.b / 255.0f;
+	color.r = (uint8_t)(Clamp(color3.r, 0.0f, 1.0f) * 255);
+	color.g = (uint8_t)(Clamp(color3.g, 0.0f, 1.0f) * 255);
+	color.b = (uint8_t)(Clamp(color3.b, 0.0f, 1.0f) * 255);
 	color.a = 255;
 
 	return color;
 }
 
+inline color4_t ColorConvert(const color_t& color)
+{
+	color4_t color4;
+	color4.r = Clamp(color.r / 255.0f, 0.0f, 255.0f);
+	color4.g = Clamp(color.g / 255.0f, 0.0f, 255.0f);
+	color4.b = Clamp(color.b / 255.0f, 0.0f, 255.0f);
+	color4.a = 255;
+
+	return color4;
+}
 enum class BlendMode
 {
 	NORMAL,
