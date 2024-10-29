@@ -7,6 +7,7 @@ inline T Lerp(const T& a, const T& b, float t)
 {
 	return static_cast<T>(a + (b - a) * t);
 }
+
 inline glm::vec3 Cross(const glm::vec3& v1, const glm::vec3& v2)
 {
 	glm::vec3 result;
@@ -16,16 +17,30 @@ inline glm::vec3 Cross(const glm::vec3& v1, const glm::vec3& v2)
 
 	return result;
 }
+
 template<typename T>
 inline T Clamp(const T& value, const T& min, const T& max)
 {
 	return (value < min) ? min : (value > max) ? max : value;
 }
+
+inline float Dot(const glm::vec3& v1, const glm::vec3& v2)
+{
+	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+inline glm::vec3 Reflect(const glm::vec3& i, const glm::vec3& n)
+{
+	
+	return i - 2.0f * dot(glm::normalize(n), i) * glm::normalize(n);
+}
+
 inline bool approximately(float value1, float value2)
 {
 	// check if the difference between the values is less than epsilon
 	return (glm::abs(value2 - value1) < FLT_EPSILON);
 }
+
 inline void QuadraticPoint(int x1, int y1, int x2, int y2, int x3, int y3, float t, int& x, int& y)
 {
 	float one_minus_t = 1 - t;

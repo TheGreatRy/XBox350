@@ -14,7 +14,7 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera)
 			point.y = 1 - point.y;
 
 			ray_t ray = camera.GetRay(point);
-			color3_t color = Tracer::Trace(*this, ray);
+			color3_t color = Tracer::Trace(*this, ray, 0.0f, 100.0f);
 			//color4_t color = { 1,0,0,1 };
 			framebuffer.DrawPoint(x, y, ColorConvert(color));
 		}
