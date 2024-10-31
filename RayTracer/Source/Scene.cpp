@@ -2,6 +2,7 @@
 #include "Framebuffer.h"
 #include "Camera.h"
 #include "Tracer.h"
+#include <iostream>
 
 void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSamples, int depth)
 {
@@ -24,6 +25,7 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSample
 				ray_t ray = camera.GetRay(point);
 				// accumulate colors from tracer
 				color += Tracer::Trace(*this, ray, 0.001f, 100.0f, depth);
+				std::cout << "Point: " << x << std::endl;
 			}
 			// average the color
 			color.r = color.r /(float) numSamples;

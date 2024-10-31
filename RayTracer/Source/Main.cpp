@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
     std::shared_ptr<Material> yellow = std::make_shared<Dielectric>(color3_t{ 1, 1, 0 }, 1.33f);
     materials.push_back(move(yellow));
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 10; i++)
     {
         auto redObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), materials[random(0,5)]);
         scene.AddObject(std::move(redObject));
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 
     //render
     //framebuffer.Clear(ColorConvert(color4_t{0,0.5f,0,1}));
-    scene.Render(framebuffer, camera, 50, 0);
+    scene.Render(framebuffer, camera, 3, 1);
 
     bool quit = false;
     while (!quit)
