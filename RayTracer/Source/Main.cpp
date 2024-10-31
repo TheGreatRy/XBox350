@@ -44,23 +44,25 @@ int main(int argc, char* argv[])
     scene.AddObject(std::move(object));*/
 
     std::vector<std::shared_ptr<Material>> materials;
-    std::shared_ptr<Material> gray = std::make_shared<Lambertian>(color3_t{ 0.5f });
 
+    //Lambertian
     std::shared_ptr<Material> green = std::make_shared<Lambertian>(color3_t{ 0,1,0 });
     materials.push_back(move(green));
-
-    //std::shared_ptr<Material> red = std::make_shared<Lambertian>(color3_t{ 1, 0, 0 });
-    std::shared_ptr<Material> red = std::make_shared<Metal>(color3_t{ 1, 0, 0 }, 0.3f);
-    materials.push_back(move(red));
-
-    //std::shared_ptr<Material> blue = std::make_shared<Lambertian>(color3_t{ 0, 0, 1 });
-    std::shared_ptr<Material> blue = std::make_shared<Metal>(color3_t{ 0, 0, 1 }, 1.0f);
-    materials.push_back(move(blue));
-
+    
     std::shared_ptr<Material> pink = std::make_shared<Lambertian>(color3_t{ 1, 0, 1});
     materials.push_back(move(pink));
 
-    std::shared_ptr<Material> yellow = std::make_shared<Lambertian>(color3_t{ 1, 1, 0 });
+    
+
+    //Metals
+    std::shared_ptr<Material> red = std::make_shared<Metal>(color3_t{ 1, 0, 0 }, 0.3f);
+    materials.push_back(move(red));
+
+    std::shared_ptr<Material> blue = std::make_shared<Metal>(color3_t{ 0, 0, 1 }, 0.1f);
+    materials.push_back(move(blue));
+
+    //Dielectric
+    std::shared_ptr<Material> yellow = std::make_shared<Dielectric>(color3_t{ 1, 1, 0 }, 1.33f);
     materials.push_back(move(yellow));
 
     for (int i = 0; i < 20; i++)
@@ -69,10 +71,15 @@ int main(int argc, char* argv[])
         scene.AddObject(std::move(redObject));
     }
     
+    std::shared_ptr<Material> gray = std::make_shared<Lambertian>(color3_t{ 0.5f });
     auto plane = std::make_unique<Plane>(glm::vec3{ 0, -5, 0 }, glm::vec3{ 0, 1, 0 }, gray); 
     scene.AddObject(std::move(plane));
     /*auto plane = std::make_unique<Plane>(glm::vec3{0, 0, 0}, glm::vec3{0, 1, 0}, planeMaterial);
     scene.AddObject(std::move(plane));*/
+
+    //render
+    //framebuffer.Clear(ColorConvert(color4_t{0,0.5f,0,1}));
+    scene.Render(framebuffer, camera, 50, 0);
 
     bool quit = false;
     while (!quit)
@@ -92,9 +99,7 @@ int main(int argc, char* argv[])
             }
         }
 
-        framebuffer.Clear(color_t{ 0,255,0,255 });
-
-        scene.Render(framebuffer, camera);
+        
 
         framebuffer.Update();
 
