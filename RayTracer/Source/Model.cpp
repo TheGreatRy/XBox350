@@ -5,11 +5,6 @@
 #include <fstream>
 #include <sstream>
 
-void Model::Draw(Framebuffer& frameBuffer, const glm::mat4& model, const Camera& camera)
-{
- 
-}
-
 bool Model::Load(const std::string& filename)
 {
 	// open file using ifstream (input file stream)
@@ -94,4 +89,19 @@ bool Model::Load(const std::string& filename)
 	stream.close();
 
 	return true;
+}
+
+bool Model::Hit(const ray_t& ray, raycastHit_t& raycastHit, float minDistance, float maxDistance)
+{
+	// check cast ray with mesh triangles 
+	/*for (size_t i = 0; i < m_vertices.size(); <skip by 3>)
+	{
+		Triangle triangle(<create triangle with the three vertex points>);
+		if (triangle.Hit(ray, raycastHit, minDistance, maxDistance))
+		{
+			return true;
+		}
+	}*/
+
+	return false;
 }

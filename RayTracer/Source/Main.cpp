@@ -38,11 +38,6 @@ int main(int argc, char* argv[])
 
     Scene scene;
 
-    /*std::shared_ptr<Material> material = std::make_shared<Lambertian>(color3_t{1,0,0});
-    std::unique_ptr<Sphere> object = std::make_unique<Sphere>(glm::vec3{ 0,0,0 }, 2.0f, material);
-
-    scene.AddObject(std::move(object));*/
-
     std::vector<std::shared_ptr<Material>> materials;
 
     //Lambertian
@@ -51,14 +46,13 @@ int main(int argc, char* argv[])
     
     std::shared_ptr<Material> pink = std::make_shared<Lambertian>(color3_t{ 1, 0, 1});
     materials.push_back(move(pink));
-
     
-
     //Metals
     std::shared_ptr<Material> red = std::make_shared<Metal>(color3_t{ 1, 0, 0 }, 0.3f);
     materials.push_back(move(red));
 
-    std::shared_ptr<Material> blue = std::make_shared<Metal>(color3_t{ 0, 0, 1 }, 0.1f);
+    //Emissive
+    std::shared_ptr<Material> blue = std::make_shared<Emissive>(color3_t{ 0, 0, 1 }, 0.5f);
     materials.push_back(move(blue));
 
     //Dielectric
@@ -70,6 +64,7 @@ int main(int argc, char* argv[])
         auto redObject = std::make_unique<Sphere>(random(glm::vec3{ -10 }, glm::vec3{ 10 }), randomf(1.0f, 5.0f), materials[random(0,5)]);
         scene.AddObject(std::move(redObject));
     }
+   
     
     std::shared_ptr<Material> gray = std::make_shared<Lambertian>(color3_t{ 0.5f });
     auto plane = std::make_unique<Plane>(glm::vec3{ 0, -5, 0 }, glm::vec3{ 0, 1, 0 }, gray); 
@@ -79,7 +74,7 @@ int main(int argc, char* argv[])
 
     //render
     //framebuffer.Clear(ColorConvert(color4_t{0,0.5f,0,1}));
-    scene.Render(framebuffer, camera, 3, 1);
+    scene.Render(framebuffer, camera, 2, 3);
 
     bool quit = false;
     while (!quit)
