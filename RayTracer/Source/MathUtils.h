@@ -36,7 +36,8 @@ inline float Angle(const glm::vec3& v1, const glm::vec3& v2)
 
 inline glm::vec3 Reflect(const glm::vec3& i, const glm::vec3& n)
 {
-	return i - ((Dot(i, n) * n) * 2.0f);
+	//return i - 2.0f * glm::dot(n, i) * n;
+	return i - ((glm::dot(i, n) * n) * 2.0f);
 }
 inline bool Refract(const glm::vec3& i, const glm::vec3& n, float ri, glm::vec3& refract)
 {

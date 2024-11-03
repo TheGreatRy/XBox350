@@ -206,7 +206,9 @@ int main(int argc, char* argv[])
         //SetBlendMode(BlendMode::ALPHA);
         //SetBlendMode(BlendMode::ADD);
         //SetBlendMode(BlendMode::MULTIPLY);
+       
         //frameBuffer.DrawImage(20, 20, 50, 100, imageAlp);
+        //PostProcess::Invert(frameBuffer.m_buffer);
 
 #pragma endregion
 
@@ -272,6 +274,7 @@ int main(int argc, char* argv[])
             actor->Draw(frameBuffer, camera);
         }
         actors[2]->GetTransform().rotation.y += 90.0f * time.GetDeltaTime();
+        PostProcess::Invert(frameBuffer.m_buffer);
 
         frameBuffer.Update();
         // show screen

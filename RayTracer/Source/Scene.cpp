@@ -8,8 +8,10 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSample
 {
 	for (int y = 0; y < framebuffer.m_height; y++)
 	{
+		std::cout << "y: " << y << std::endl;
 		for (int x = 0; x < framebuffer.m_width; x++)
 		{
+			
 			color3_t color{ 0 };
 			// multi-sample for each pixel
 			for (int i = 0; i < numSamples; i++)
@@ -25,7 +27,7 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSample
 				ray_t ray = camera.GetRay(point);
 				// accumulate colors from tracer
 				color += Tracer::Trace(*this, ray, 0.001f, 100.0f, depth);
-				std::cout << "Point: " << x << std::endl;
+				
 			}
 			// average the color
 			color.r = color.r /(float) numSamples;

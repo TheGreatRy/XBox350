@@ -269,7 +269,7 @@ void PostProcess::Edge(std::vector<color_t>& buffer, int width, int height, int 
 			}
 
 		} 
-		int m = std::sqrt((h * h) + (v * v));
+		int m = (int) std::sqrt((h * h) + (v * v));
 		m = (m >= threshold) ? m : 0;
 		uint8_t c = Clamp(m, 0, 255);
 
