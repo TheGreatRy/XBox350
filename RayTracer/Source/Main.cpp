@@ -66,8 +66,13 @@ int main(int argc, char* argv[])
         scene.AddObject(std::move(randObject));
     }
     auto triangle = std::make_unique<Triangle>(glm::vec3{5,-2.5f,-5}, glm::vec3{0,2.5f,0}, glm::vec3{-5,-2.5f,-5}, materials[3]);
-    scene.AddObject(std::move(triangle));
-    
+    //scene.AddObject(std::move(triangle));
+
+    auto model = std::make_unique<Model>( materials[3] );
+    model->Load("cube-2.obj");
+    /*Transform transform = { glm::vec3{-5,0,0}, glm::vec3{0,0,0}, glm::vec3{3} };
+    auto actor = std::make_unique<Actor>(transform, std::move(model));*/
+    scene.AddObject(std::move(model));
     
     std::shared_ptr<Material> gray = std::make_shared<Lambertian>(color3_t{ 0.5f });
     auto plane = std::make_unique<Plane>(glm::vec3{ 0, -5, 0 }, glm::vec3{ 0, 1, 0 }, gray); 

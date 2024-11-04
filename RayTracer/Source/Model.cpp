@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Framebuffer.h"
+#include "Triangle.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -94,14 +95,15 @@ bool Model::Load(const std::string& filename)
 bool Model::Hit(const ray_t& ray, raycastHit_t& raycastHit, float minDistance, float maxDistance)
 {
 	// check cast ray with mesh triangles 
-	/*for (size_t i = 0; i < m_vertices.size(); <skip by 3>)
+	for (size_t i = 0; i < m_vertices.size(); i += 3)
 	{
-		Triangle triangle(<create triangle with the three vertex points>);
+		Triangle triangle(m_vertices[i], m_vertices[i + 1], m_vertices[i + 2], this->GetMaterial().lock());
+
 		if (triangle.Hit(ray, raycastHit, minDistance, maxDistance))
 		{
 			return true;
 		}
-	}*/
+	}
 
 	return false;
 }
