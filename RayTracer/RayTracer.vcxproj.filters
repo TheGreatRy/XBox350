@@ -43,16 +43,16 @@
     <ClCompile Include="Source\Tracer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Sphere.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Plane.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Material.cpp">
+    <ClCompile Include="Source\Triangle.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Triangle.cpp">
+    <ClCompile Include="Source\Sphere.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Material.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,9 +102,6 @@
     <ClInclude Include="Source\Scene.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Material.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneObject.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -115,6 +112,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Source\Triangle.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

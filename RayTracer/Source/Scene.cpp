@@ -2,13 +2,24 @@
 #include "Framebuffer.h"
 #include "Camera.h"
 #include "Tracer.h"
+#include "ETime.h"
 #include <iostream>
+
+void Scene::Update()
+{
+	for (auto& object : m_objects)
+	{
+		object->Update();
+	}
+}
 
 void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSamples, int depth)
 {
+	Time frameTimer;
+	Time scanlineTimer;
 	for (int y = 0; y < framebuffer.m_height; y++)
 	{
-		std::cout << "y: " << y << std::endl;
+		scanlineTimer.Reset();
 		for (int x = 0; x < framebuffer.m_width; x++)
 		{
 			
@@ -20,9 +31,9 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSample
 				// add a random value to the pixel (0-1)
 				pixel += glm::vec2{ 0.0f, 1.0f };
 				// normalize the pixel value
-				glm::vec2 point = pixel / glm::vec2{ framebuffer.m_width, framebuffer.m_height };
+				glm::vec2 point = pixel / glm::vec2{ (float) framebuffer.m_width, (float) framebuffer.m_height };
 				// flip the y value (bottom = 0, top = 1)
-				point.y = 1 - point.y;
+				point.y = 1.0f - point.y;
 
 				ray_t ray = camera.GetRay(point);
 				// accumulate colors from tracer
@@ -30,10 +41,10 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSample
 				
 			}
 			// average the color
-			color.r = color.r /(float) numSamples;
-			color.g = color.g /(float) numSamples;
-			color.b = color.b /(float) numSamples;
+			color /= (float)numSamples;
 			framebuffer.DrawPoint(x, y, ColorConvert(color));
 		}
+		std::cout << "y: " << y << " - " << scanlineTimer.GetElapsedTime() << std::endl;
 	}
+	std::cout << "frame time: "<< frameTimer.GetElapsedTime() << std::endl;
 }
