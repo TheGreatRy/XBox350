@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     InitScene(scene);
     scene.Update();
     
-    scene.Render(framebuffer, camera, 1000, 3);
+    scene.Render(framebuffer, camera, 80, 6);
     framebuffer.Update();
 
     bool quit = false;
@@ -74,36 +74,47 @@ int main(int argc, char* argv[])
 
 void InitScene(Scene& scene)
 {
+    //final
+    //scene.SetSky(color3_t{ 1,1,1 }, color3_t{ 0.1f,0.3f,0.5f });
+
+    //final extra credit
+    scene.SetSky(color3_t{ 0,0,0 }, color3_t{ 0.1f,0.3f,0.7f });
     
     std::vector<std::shared_ptr<Material>> materials;
 
     //Lambertian
-    std::shared_ptr<Material> green = std::make_shared<Lambertian>(color3_t{ 0,1,0 });
-    materials.push_back(green);
+    std::shared_ptr<Material> blue = std::make_shared<Lambertian>(color3_t{ 0,0,1 });
+    materials.push_back(blue);
 
     std::shared_ptr<Material> red = std::make_shared<Lambertian>(color3_t{ 1, 0, 0 });
     materials.push_back(red);
 
-    std::shared_ptr<Material> blue = std::make_shared<Lambertian>(color3_t{ 0, 0, 1 });
-    materials.push_back(blue);
-
     //Metals
-    std::shared_ptr<Material> pink = std::make_shared<Metal>(color3_t{ 1, 0, 1 }, 0.5f);
-    materials.push_back(pink);
-
-    //Emissive
-
-    //Dielectric
-    std::shared_ptr<Material> yellow = std::make_shared<Dielectric>(color3_t{ 1, 1, 0 }, 5.33f);
+    std::shared_ptr<Material> yellow = std::make_shared<Metal>(color3_t{ 1, 1, 0 }, 0.5f);
     materials.push_back(yellow);
 
+    auto cyan = std::make_shared<Metal>(color3_t{ 0,1,1 }, 0.3f);
+    materials.push_back(cyan);
+
+    //Emissive
+    std::shared_ptr<Material> white = std::make_shared<Emissive>(color3_t{ 1});
+    materials.push_back(white);
+
+    //Dielectric
+    std::shared_ptr<Material> pink = std::make_shared<Dielectric>(color3_t{ 1, 0, 1}, 3.01f);
+    materials.push_back(pink);
+    
+    std::shared_ptr<Material> glass = std::make_shared<Dielectric>(color3_t{ 1 }, 5.33f);
+
+    //plane
+    /*
     std::shared_ptr<Material> gray = std::make_shared<Lambertian>(color3_t{ 1 });
-
-    //box
     auto plane = std::make_unique<Plane>(Transform{ glm::vec3{0,-2,0}, glm::vec3{0, 0 ,0} }, gray);
-    scene.AddObject(std::move(plane));
+    scene.AddObject(std::move(plane));*/
+    
+    //box
 
-    auto roof = std::make_unique<Plane>(Transform{ glm::vec3{0,2,0}, glm::vec3{180, 0 ,0} }, gray);
+    /*auto roof = std::make_unique<Plane>(Transform{ glm::vec3{0,2,0}, glm::vec3{180, 0 ,0} }, gray);
     scene.AddObject(std::move(roof));
     
     auto planeBack = std::make_unique<Plane>(Transform{ glm::vec3{0,0,11}, glm::vec3{90, 0 ,0} }, gray);
@@ -113,29 +124,48 @@ void InitScene(Scene& scene)
     scene.AddObject(std::move(wallLeft));
     
     auto wallRight = std::make_unique<Plane>(Transform{ glm::vec3{-3,0,0}, glm::vec3{90, 0 ,90} }, green);
-    scene.AddObject(std::move(wallRight));
+    scene.AddObject(std::move(wallRight));*/
 
-    for (int i = 0; i < 0; i++)
+    
+    for (int i = 0; i < 300; i++)
     {
+        //final
+        /*auto randObject = std::make_unique<Sphere>(
+            Transform{ random(glm::vec3{ -20.0f, -1.5f, -20.0f }, glm::vec3{ 20.0f, -1.0f, 30.0f }), glm::vec3{20,0,0} },
+            randomf(0.1f, 0.5f),
+            materials[random(0, 6)]
+        );*/
+        //final extra credit
         auto randObject = std::make_unique<Sphere>(
-            Transform{ random(glm::vec3{ -10.0f }, glm::vec3{ 10.0f }), glm::vec3{20,0,0} },
-            randomf(1.0f, 5.0f),
-            materials[random(0, 5)]
+            Transform{ random(glm::vec3{ -20.0f, -5.0f, -20.0f }, glm::vec3{ 20.0f, 5.0f, 30.0f }), glm::vec3{20,0,0} },
+            randomf(0.1f, 0.5f),
+            glass
         );
         scene.AddObject(std::move(randObject));
     }
-    /*auto triangle = std::make_unique<Triangle>(glm::vec3{ 5,-2.5f,-5 }, glm::vec3{ 0,2.5f,0 }, glm::vec3{ -5,-2.5f,-5 }, materials[3]);
-    scene.AddObject(std::move(triangle));*/
-
-    auto model = std::make_unique<Model>(Transform{ glm::vec3{0,2.47f,16}, glm::vec3{0,0,0}, glm::vec3{1} }, std::make_shared<Emissive>(HSVtoRGB( 300.0f, 0.0f, 10.0f )));
-    model->Load("models/cube.obj");
-    scene.AddObject(std::move(model));
     
-    auto sphere = std::make_unique<Sphere>(Transform{ glm::vec3{1,-1.5f, 16}, glm::vec3{0,0,0}, glm::vec3{1} }, 0.5f, pink );
+    
+    //final
+    /*std::shared_ptr<Material> metal = std::make_shared<Metal>(color3_t{ 0.7f }, 0.0f);
+    auto sphere = std::make_unique<Sphere>(Transform{ glm::vec3{-3,-0.5f, 15}, glm::vec3{0,0,0}, glm::vec3{1.5f} }, 1.0f, metal );
     scene.AddObject(std::move(sphere));
     
-    auto cube = std::make_unique<Model>(Transform{ glm::vec3{-1,-1.5f, 15}, glm::vec3{0,45,0} }, blue );
-    cube->Load("models/cube.obj");
+    auto orb = std::make_unique<Sphere>(Transform{ glm::vec3{-1,-0.5f, 10}, glm::vec3{0,0,0}, glm::vec3{1.5f} }, 1.0f, glass );
+    scene.AddObject(std::move(orb));
+    
+    std::shared_ptr<Material> diffuse = std::make_shared<Lambertian>(color3_t{ 0.1f, 0.7f, 0.3f });
+    auto cube = std::make_unique<Model>(Transform{ glm::vec3{1,-0.5f, 5}, glm::vec3{0,0,0}, glm::vec3{1.5f} }, diffuse );
+    cube->Load("models/cube.obj"),
+    scene.AddObject(std::move(cube));*/
+
+    //final extra credit
+    auto triangle = std::make_unique<Triangle>(glm::vec3{ 10,-2.5f,0 }, glm::vec3{ 10,2.5f,0 }, glm::vec3{5,0,0 } , blue);
+    scene.AddObject(std::move(triangle));
+
+    auto cube = std::make_unique<Model>(Transform{ glm::vec3{1,0, 5}, glm::vec3{0,30,0}, glm::vec3{5} }, blue);
+    cube->Load("models/cube-2.obj");
     scene.AddObject(std::move(cube));
 
+    auto orb = std::make_unique<Sphere>(Transform{ glm::vec3{-5,5, 5}, glm::vec3{0,0,0}, glm::vec3{1.5f} }, 1.0f, white);
+    scene.AddObject(std::move(orb));
 }
