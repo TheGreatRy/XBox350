@@ -1,7 +1,9 @@
 #include "Actor.h"
+#include "Shader.h"
 
-void Actor::Draw(Framebuffer& frameBuffer, const Camera& camera)
+void Actor::Draw()
 {
-	m_model->SetColor(m_color);
-	m_model->Draw(frameBuffer, m_transform.GetMatrix(), camera);
+	//VertexShader::uniforms.model = m_transform.position;
+
+	m_model->Draw();
 }

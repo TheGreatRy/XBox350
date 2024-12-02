@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
     SetBlendMode(BlendMode::NORMAL);
 
     Camera camera(renderer.m_width, renderer.m_height);
-    camera.SetView(glm::vec3{ 50,50,-100}, glm::vec3{ 0 });
+    camera.SetView(glm::vec3{ 0,0,0}, glm::vec3{ 0 });
     camera.SetProjection(60.0f, 800.0f / 600, 0.1f, 200.0f);
-    Transform camTransform{ {0,0,0} };
+    Transform camTransform{ {0,0,-10} };
 
     Framebuffer frameBuffer(renderer, 800, 600);
 
@@ -46,47 +46,53 @@ int main(int argc, char* argv[])
     imageAlp.Load("colors.png");
     PostProcess::Alpha(imageAlp.m_buffer, 128);
 
-    vertices_t vertices = { {-5, 5, 0}, {5, 5, 0},{-5, -5, 0} };
-    //Model model(vertices, { 0,255,0,255 });
+    VertexShader::uniforms.view = camera.GetView();
+    VertexShader::uniforms.projection = camera.GetProjection();
+    VertexShader::uniforms.ambient = color3_t{ 0.01f };
+
+    VertexShader::uniforms.light.position = glm::vec3{ 10, 10, -10 };
+    VertexShader::uniforms.light.direction = glm::vec3{ 0, -1, 0 }; // light pointing down
+    VertexShader::uniforms.light.color = color3_t{ 1 }; 
+
+    Shader::framebuffer = &frameBuffer;
 
     std::vector<std::unique_ptr<Actor>> actors;
 
-    //Astronaut by Poly by Google [CC-BY] via Poly Pizza
+#pragma region scene
+    ////Astronaut by Poly by Google [CC-BY] via Poly Pizza
+    //std::shared_ptr<Model> site = std::make_shared<Model>();
+    //site->Load("models/model.obj");
+
+    //Transform siteTrans = { {-25, 0,50}, glm::vec3{-15,0,-45}, glm::vec3{15} };
+    //std::unique_ptr<Actor> siteActor = std::make_unique<Actor>(siteTrans, site);
+    //siteActor->SetColor({ 150,0,200,255 });
+    //actors.push_back(std::move(siteActor));
+
+    ////Rocket ship by Poly by Google [CC-BY] via Poly Pizza
+    //std::shared_ptr<Model> ship = std::make_shared<Model>();
+    //ship->Load("models/RocketShip.obj");
+
+    //Transform shipTrans = { {30, 0,50}, glm::vec3{15,0,45}, glm::vec3{1} };
+    //std::unique_ptr<Actor> shipActor = std::make_unique<Actor>(shipTrans, ship);
+    //shipActor->SetColor({ 150,0,0,255 });
+    //actors.push_back(std::move(shipActor));
+
+    ////Moon by Poly by Google [CC-BY] via Poly Pizza
+    //std::shared_ptr<Model> model = std::make_shared<Model>();
+    //model->Load("models/moon.obj");
+
+    //Transform transform = { {0,-20,60}, glm::vec3{0,0,0}, glm::vec3{0.5f} };
+    //std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
+    //actor->SetColor({ 100,100,100,255 });
+    //actors.push_back(std::move(actor));
+#pragma endregion
+
     std::shared_ptr<Model> site = std::make_shared<Model>();
-    site->Load("model.obj");
+    site->Load("models/sphere.obj");
 
-    Transform siteTrans = { {-25, 0,50}, glm::vec3{-15,0,-45}, glm::vec3{15} };
+    Transform siteTrans = { glm::vec3{0}, glm::vec3{0}, glm::vec3{5} };
     std::unique_ptr<Actor> siteActor = std::make_unique<Actor>(siteTrans, site);
-    siteActor->SetColor({ 150,0,200,255 });
     actors.push_back(std::move(siteActor));
-
-    //Rocket ship by Poly by Google [CC-BY] via Poly Pizza
-    std::shared_ptr<Model> ship = std::make_shared<Model>();
-    ship->Load("RocketShip.obj");
-
-    Transform shipTrans = { {30, 0,50}, glm::vec3{15,0,45}, glm::vec3{1} };
-    std::unique_ptr<Actor> shipActor = std::make_unique<Actor>(shipTrans, ship);
-    shipActor->SetColor({ 150,0,0,255 });
-    actors.push_back(std::move(shipActor));
-
-    //Moon by Poly by Google [CC-BY] via Poly Pizza
-    std::shared_ptr<Model> model = std::make_shared<Model>();
-    model->Load("moon.obj");
-
-    Transform transform = { {0,-20,60}, glm::vec3{0,0,0}, glm::vec3{0.5f} };
-    std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
-    actor->SetColor({ 100,100,100,255 });
-    actors.push_back(std::move(actor));
-
-    
-
-    /*for (int i = 0; i < 20; i++)
-    {
-        Transform transform = { {randomf(-10.0f, 10.0f),randomf(-10.0f, 10.0f),randomf(-10.0f, 10.0f)}, glm::vec3{0,0,0}, glm::vec3{2} };
-        std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
-        actor->SetColor({ uint8_t(rand() % 255),uint8_t(rand() % 255),uint8_t(rand() % 255), 255 });
-        actors.push_back(std::move(actor));
-    }*/
 
     bool quit = false;
     while (!quit)
@@ -258,7 +264,7 @@ int main(int argc, char* argv[])
             camTransform.rotation.x += input.GetMouseRelative().y * 0.25f;
 
             glm::vec3 offset = camTransform.GetMatrix() * glm::vec4{ direction, 0 };
-            camTransform.position += offset * 15.0f * time.GetDeltaTime();
+            camTransform.position += offset * 5.0f * time.GetDeltaTime();
         }
         else
         {
@@ -268,13 +274,15 @@ int main(int argc, char* argv[])
 
         
         camera.SetView(camTransform.position, camTransform.position + camTransform.GetForward());
+        VertexShader::uniforms.view = camera.GetView();
         
         for (auto& actor : actors) 
         {
-            actor->Draw(frameBuffer, camera);
+            actor->GetTransform().rotation.y += 90.0f * time.GetDeltaTime();
+            actor->Draw();
         }
-        actors[2]->GetTransform().rotation.y += 90.0f * time.GetDeltaTime();
-        PostProcess::Invert(frameBuffer.m_buffer);
+        /*;
+        PostProcess::Invert(frameBuffer.m_buffer);*/
 
         frameBuffer.Update();
         // show screen
