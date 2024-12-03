@@ -31,14 +31,14 @@ void VertexShader::Process(const vertex_t& ivertex, vertex_output_t& overtex)
 	//Point Light
 	light_position = uniforms.view * glm::vec4{ light_position, 1 };
 
-	glm::vec3 vposition = mv * glm::vec4{ ivertex.position, 1 };
-
-	//Point Light
-	uniforms.light.direction = glm::normalize(light_position - vposition);
-	
 	//Directional Light
-	/*light_dir = uniforms.view * glm::vec4{ light_dir, 1 };
-	light_dir = glm::normalize(-uniforms.light.direction);*/
+	light_dir = uniforms.view * glm::vec4{ light_dir, 0 };
+	light_dir = glm::normalize(-uniforms.light.direction);
+
+	glm::vec3 vposition = mv * glm::vec4{ ivertex.position, 1 };
+	light_dir = glm::normalize(light_position - vposition);
+	
+	
 
 	//Light intensity = dot(normalized light dir, vertex normal)
 	//Clamp to prevent negatives

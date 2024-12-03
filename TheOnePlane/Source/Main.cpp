@@ -87,12 +87,12 @@ int main(int argc, char* argv[])
     //actors.push_back(std::move(actor));
 #pragma endregion
 
-    std::shared_ptr<Model> site = std::make_shared<Model>();
-    site->Load("models/sphere.obj");
+    std::shared_ptr<Model> object = std::make_shared<Model>();
+    object->Load("models/teapot.obj");
 
-    Transform siteTrans = { glm::vec3{0}, glm::vec3{0}, glm::vec3{5} };
-    std::unique_ptr<Actor> siteActor = std::make_unique<Actor>(siteTrans, site);
-    actors.push_back(std::move(siteActor));
+    Transform objTrans = { glm::vec3{0}, glm::vec3{0}, glm::vec3{5} };
+    std::unique_ptr<Actor> objActor = std::make_unique<Actor>(objTrans, object);
+    actors.push_back(std::move(objActor));
 
     bool quit = false;
     while (!quit)
@@ -278,7 +278,7 @@ int main(int argc, char* argv[])
         
         for (auto& actor : actors) 
         {
-            actor->GetTransform().rotation.y += 90.0f * time.GetDeltaTime();
+            actor->GetTransform().rotation.y += time.GetDeltaTime() * 90;
             actor->Draw();
         }
         /*;

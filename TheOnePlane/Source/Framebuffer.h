@@ -26,6 +26,7 @@ public:
 	void DrawQuadraticCurve(int x1, int y1, int x2, int y2,int x3, int y3, const color_t& color);
 	void DrawCubicCurve(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4, const color_t& color);
 
+	std::vector<float>& GetDepth() { return m_depth; }
 
 	friend class Renderer;
 
@@ -48,6 +49,7 @@ public:
 	int m_width{ 0 };
 	int m_height{ 0 };
 	int m_pitch{ 0 };
+	std::vector<float> m_depth;
 	SDL_Texture* m_texture{ nullptr };
 	std::vector<color_t> m_buffer;
 };
