@@ -46,13 +46,19 @@ int main(int argc, char* argv[])
     imageAlp.Load("colors.png");
     PostProcess::Alpha(imageAlp.m_buffer, 128);
 
-    VertexShader::uniforms.view = camera.GetView();
-    VertexShader::uniforms.projection = camera.GetProjection();
-    VertexShader::uniforms.ambient = color3_t{ 0.01f };
+    Shader::uniforms.view = camera.GetView();
+    Shader::uniforms.projection = camera.GetProjection();
+    Shader::uniforms.ambient = color3_t{ 0.01f };
 
-    VertexShader::uniforms.light.position = glm::vec3{ 10, 10, -10 };
-    VertexShader::uniforms.light.direction = glm::vec3{ 0, -1, 0 }; // light pointing down
-    VertexShader::uniforms.light.color = color3_t{ 1 }; 
+    Shader::uniforms.light.position = glm::vec3{ 10, 10, -10 };
+    Shader::uniforms.light.direction = glm::vec3{ 0, -1, 0 }; // light pointing down
+    Shader::uniforms.light.color = color3_t{ 1 }; 
+
+    // materials
+    std::shared_ptr<material_t> material = std::make_shared<material_t>();
+    material->albedo = color3_t{ 0, 0, 1 };
+    material->specular = color3_t{ 1 };
+    material->shininess = 32.0f;
 
     Shader::framebuffer = &frameBuffer;
 
@@ -87,12 +93,12 @@ int main(int argc, char* argv[])
     //actors.push_back(std::move(actor));
 #pragma endregion
 
-    std::shared_ptr<Model> object = std::make_shared<Model>();
-    object->Load("models/teapot.obj");
+    std::shared_ptr<Model> model = std::make_shared<Model>();
+    model->Load("models/cube.obj");
+    Transform transform = { glm::vec3{0}, glm::vec3{0}, glm::vec3{5} };
 
-    Transform objTrans = { glm::vec3{0}, glm::vec3{0}, glm::vec3{5} };
-    std::unique_ptr<Actor> objActor = std::make_unique<Actor>(objTrans, object);
-    actors.push_back(std::move(objActor));
+    std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model, material);
+    actors.push_back(std::move(actor));
 
     bool quit = false;
     while (!quit)
@@ -274,7 +280,7 @@ int main(int argc, char* argv[])
 
         
         camera.SetView(camTransform.position, camTransform.position + camTransform.GetForward());
-        VertexShader::uniforms.view = camera.GetView();
+        Shader::uniforms.view = camera.GetView();
         
         for (auto& actor : actors) 
         {

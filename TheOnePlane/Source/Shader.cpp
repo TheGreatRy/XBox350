@@ -6,6 +6,14 @@ Framebuffer* Shader::framebuffer{ nullptr };
 Shader::eFrontFace Shader::front_face = Shader::eFrontFace::CCW;
 Shader::eCullMode Shader::cull_mode = Shader::eCullMode::BACK;
 
+Shader::uniforms_t Shader::uniforms =
+{
+	glm::mat4{ 1 },
+	glm::mat4{ 1 },
+	glm::mat4{ 1 },
+	color3_t{ 1 }
+};
+
 void Shader::Draw(const vertexbuffer_t& vb)
 {
 	// vertex shader
