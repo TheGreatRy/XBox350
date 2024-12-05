@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 
     Shader::uniforms.view = camera.GetView();
     Shader::uniforms.projection = camera.GetProjection();
-    Shader::uniforms.ambient = color3_t{ 0.01f };
+    Shader::uniforms.ambient = color3_t{ 0.05f };
 
     Shader::uniforms.light.position = glm::vec3{ 10, 10, -10 };
     Shader::uniforms.light.direction = glm::vec3{ 0, -1, 0 }; // light pointing down
@@ -58,7 +58,17 @@ int main(int argc, char* argv[])
     std::shared_ptr<material_t> material = std::make_shared<material_t>();
     material->albedo = color3_t{ 0, 0, 1 };
     material->specular = color3_t{ 1 };
-    material->shininess = 32.0f;
+    material->shininess = 50.0f;
+    
+    std::shared_ptr<material_t> material_dull = std::make_shared<material_t>();
+    material_dull->albedo = color3_t{ 0, 1, 0 };
+    material_dull->specular = color3_t{ 0.1f };
+    material_dull->shininess = 5.0f;
+    
+    std::shared_ptr<material_t> material_mid = std::make_shared<material_t>();
+    material_mid->albedo = color3_t{ 1, 0, 0 };
+    material_mid->specular = color3_t{ 0.7f };
+    material_mid->shininess = 15.0f;
 
     Shader::framebuffer = &frameBuffer;
 
@@ -95,10 +105,20 @@ int main(int argc, char* argv[])
 
     std::shared_ptr<Model> model = std::make_shared<Model>();
     model->Load("models/cube.obj");
-    Transform transform = { glm::vec3{0}, glm::vec3{0}, glm::vec3{5} };
+    Transform transform = { glm::vec3{0}, glm::vec3{0}, glm::vec3{3} };
 
     std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model, material);
     actors.push_back(std::move(actor));
+
+    Transform transform_dull = { glm::vec3{5,0,0}, glm::vec3{0}, glm::vec3{3} };
+
+    std::unique_ptr<Actor> actor_dull = std::make_unique<Actor>(transform_dull, model, material_dull);
+    actors.push_back(std::move(actor_dull));
+    
+    Transform transform_mid = { glm::vec3{-5,0,0}, glm::vec3{0}, glm::vec3{3} };
+
+    std::unique_ptr<Actor> actor_mid = std::make_unique<Actor>(transform_mid, model, material_mid);
+    actors.push_back(std::move(actor_mid));
 
     bool quit = false;
     while (!quit)
