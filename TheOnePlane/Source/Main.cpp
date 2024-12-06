@@ -113,12 +113,12 @@ int main(int argc, char* argv[])
     Transform transform_dull = { glm::vec3{5,0,0}, glm::vec3{0}, glm::vec3{3} };
 
     std::unique_ptr<Actor> actor_dull = std::make_unique<Actor>(transform_dull, model, material_dull);
-    actors.push_back(std::move(actor_dull));
+    //actors.push_back(std::move(actor_dull));
     
     Transform transform_mid = { glm::vec3{-5,0,0}, glm::vec3{0}, glm::vec3{3} };
 
     std::unique_ptr<Actor> actor_mid = std::make_unique<Actor>(transform_mid, model, material_mid);
-    actors.push_back(std::move(actor_mid));
+    //actors.push_back(std::move(actor_mid));
 
     bool quit = false;
     while (!quit)
